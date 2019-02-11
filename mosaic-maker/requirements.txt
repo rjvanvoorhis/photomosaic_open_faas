@@ -1,0 +1,9 @@
+flask
+click
+flask-restplus
+Pillow
+numpy
+flask-cors
+requests_futures
+gunicorn
+git+git://github.com/rjvanvoorhis/photomosaic.git

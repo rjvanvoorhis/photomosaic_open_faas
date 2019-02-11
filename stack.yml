@@ -1,0 +1,19 @@
+provider:
+  name: faas
+  gateway: http://127.0.0.1:8080
+functions:
+  mosaic-healthcheck:
+    lang: python3
+    handler: ./mosaic-healthcheck
+    image: ryanjvanvoorhis/mosaic-healthcheck:latest
+    environment:
+      MOSAIC_API_URL: http://mosaic-api:5000/api/v1/photomosaic
+
+  mosaic-maker:
+    lang: cython3
+    handler: ./mosaic-maker
+    image: ryanjvanvoorhis/mosaic-maker:latest
+    environment:
+      MOSAIC_API_URL: http://mosaic-api:5000/api/v1/photomosaic
+    build_options:
+     - gifsicle
