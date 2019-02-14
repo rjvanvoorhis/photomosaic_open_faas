@@ -2,12 +2,12 @@
 
 Everything you need to run your own local photomosaic cluster.
 
-## Prequisites
+## Prerequisites
 
 Docker is required to start the cluster, if you don't have it installed get it [here](https://docs.docker.com/) 
 
-To create each photomosaic let's go severless. We make use of [OpenFaaS](https://docs.openfaas.com/) an open source Function as a Service project as the name implies. You will need to install the [faas-cli](https://github.com/openfaas/faas-cli/) the 
-hands workshop you can find there will walk you through all the steps to set things up but if you just want a curl command
+To create each photomosaic let's go severless. We make use of [OpenFaaS](https://docs.openfaas.com/) an open source Function as a Service project as the name implies. You will need to install the [faas-cli](https://github.com/openfaas/faas-cli/). 
+The hands on workshop you can find there will walk you through all the steps to set things up but if you just want a curl command
 
 ```bash
 curl -sSL https://cli.openfaas.com | sudo sh
