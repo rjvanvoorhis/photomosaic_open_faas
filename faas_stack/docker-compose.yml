@@ -12,7 +12,7 @@ services:
             - MAIL_PASSWORD=${MAIL_PASSWORD}
             - FRONT_END_URL=${FRONT_END_URL}
             - S3_ENDPOINT_URL=http://localstack-s3:4572/
-            - S3_EXTERNAL_URL=http://localhost:4572
+            - S3_EXTERNAL_URL=${S3_EXTERNAL_URL}
             - MEDIA_BUCKET=images
         ports:
             - "5000:5000"
