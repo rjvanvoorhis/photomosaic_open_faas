@@ -5,12 +5,14 @@ from io import BytesIO
 import json
 import os
 from functools import partial
+from copy import deepcopy
 from photomosaic.scripts import create_photomosaic
 
 
 class Environment(object):
     def __getattr__(self, key):
-        return {k.lower(): v for k, v in os.environ.items()}.get(key)
+        environ = deepcopy(os.environ)
+        return {k.lower().replace('-', '_').replace('x_', ''): v for k, v in environ.items()}.get(key)
 
 
 def callback_function(idx, item, username):
@@ -38,7 +40,7 @@ def callback_function(idx, item, username):
         'progress': float(idx / max(1, total_frames)),
         'total_frames': total_frames
     }
-    requests.patch(url, data=json.dumps(payload))
+    requests.patch(url, data=json.dumps(payload), headers={'Authorization': Environment().authorization})
 
 
 def make_file_path(extension='jpg'):
@@ -79,7 +81,7 @@ def handle(req):
     if alternate_file is not None:
         msg = f'{msg} and progress gif {alternate_file}'
         files['alternate_file'] = (alternate_file, open(alternate_file, 'rb'), 'image/gif')
-    requests.post(url, files=files)
+    requests.post(url, files=files, headers={'Authorization': Environment().authorization})
     for fp in [alternate_file, new_file]:
         if fp is not None and os.path.exists(fp):
             os.remove(fp)
