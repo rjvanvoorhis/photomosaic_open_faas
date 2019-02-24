@@ -3,32 +3,37 @@ services:
     mosaic-api:
         image: ryanjvanvoorhis/mosaic-api
         environment:
-            - FAAS_URL=${FAAS_URL}
-            - MONGODB_URI=mongodb://mongodb:27017/
+            - MONOGODB_URI=mongodb://mongodb:27017/
             - SECRET_KEY=${SECRET_KEY}
-            - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-            - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-            - MAIL_USERNAME=${MAIL_USERNAME}
             - MAIL_PASSWORD=${MAIL_PASSWORD}
-            - FRONT_END_URL=${FRONT_END_URL}
-            - S3_ENDPOINT_URL=http://localstack-s3:4572/
-            - S3_EXTERNAL_URL=${S3_EXTERNAL_URL}
-            - MEDIA_BUCKET=images
+            - MAIL_USERNAME=${MAIL_USERNAME}
+            - FRONT_END_URL=http://localhost:8081
+            - FAAS_URL=${FAAS_URL}
+            - S3_ENDPOINT_URL=http://local-s3:80/
+            - S3_EXTERNAL_URL=http://localhost:80
+            - MOSAIC_API_URL_INTERNAL=http://mosaic-api:5000/api/v1/photomosaic
+            - MOSAIC_API_URL_EXTERNAL=http://${BROADCAST_IP}:5000/api/v1/photomosaic
+            - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
+            - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+            - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
         ports:
             - "5000:5000"
         networks:
             - functions
 
-    localstack-s3:
-        image: localstack/localstack
-        environment:
-            - DATA_DIR=/tmp/localstack/data
-            - SERVICES=s3:4572
-            - DEFAULT_REGION=us-east-1
+
+    ### DATA ###
+    local-s3:
+        user: root
+        image: andrewgaul/s3proxy
         ports:
-            - "4572:4572"
+            - "80:80"
+        environment:
+            - S3PROXY_AUTHORIZATION=none
+        volumes:
+            - /opt/local_s3:/data
         networks:
-            - functions
+          - functions
 
     mongodb:
         user: root
@@ -39,6 +44,8 @@ services:
             - /opt/mongodb:/bitnami
         networks:
             - functions
+
+    ### Open_FaaS ###
     gateway:
         ports:
             - 8080:8080
